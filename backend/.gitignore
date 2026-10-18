@@ -1,0 +1,29 @@
+# ── Secrets ───────────────────────────────────────────────────────────────────
+.env
+.env.*
+*.env
+*.env.*
+!.env.example
+
+# ── Virtual Environments ───────────────────────────────────────────────────────
+venv/
+.venv/
+env/
+ENV/
+
+# ── Python Caches & Build ─────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# ── Diagnostics & Scratch ─────────────────────────────────────────────────────
+diagnose.py
+*.log
+.pytest_cache/
+.coverage
+htmlcov/
