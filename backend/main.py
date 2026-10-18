@@ -35,18 +35,25 @@ app = FastAPI(
 )
 
 # ── CORS ──────────────────────────────────────────────────────────────────────
+raw_origins = os.getenv(
+    "ALLOWED_ORIGINS",
+    "http://localhost:3000,http://127.0.0.1:3000",
+)
+
 origins = [
-    o.strip()
-    for o in os.getenv(
-        "ALLOWED_ORIGINS",
-        "http://localhost:3000,http://127.0.0.1:3000",
-    ).split(",")
+    o.strip().rstrip("/")
+    for o in raw_origins.split(",")
     if o.strip()
 ]
+
+# Allow any Vercel deployment domain (production & previews) plus explicit ALLOWED_ORIGINS
+allow_vercel = os.getenv("ALLOW_VERCEL_PREVIEWS", "true").lower() == "true"
+vercel_regex = r"^https:\/\/.*\.vercel\.app$" if allow_vercel else None
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
+    allow_origin_regex=vercel_regex,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -142,4 +149,5 @@ if __name__ == "__main__":
     import uvicorn
 
     port = int(os.getenv("PORT", 8000))
-    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
+    is_dev = os.getenv("ENVIRONMENT", "development").lower() == "development"
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=is_dev)

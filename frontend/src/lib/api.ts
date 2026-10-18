@@ -5,7 +5,8 @@
  * every request so the backend needs no database.
  */
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+const RAW_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+const BASE_URL = RAW_BASE_URL.replace(/\/+$/, "");
 
 // ── Types (mirror backend models.py) ─────────────────────────────────────────
 
